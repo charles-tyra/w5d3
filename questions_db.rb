@@ -26,13 +26,15 @@ class Users
         User.new(id)
     end
 
-    def initialize
-        
+    def initialize(options)
+        @id = options['id']
+        @fname = options['fname']
+        @lname = options['lname']
     end
 end
 
 class Questions
-
+    
 end
 
 class Question_follows
