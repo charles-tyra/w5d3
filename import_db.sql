@@ -17,7 +17,10 @@ CREATE TABLE questions (
 
 CREATE TABLE question_follows (
    users_id INTEGER NOT NULL,
-   questions_id INTEGER NOT NULL
+   questions_id INTEGER NOT NULL,
+
+   FOREIGN KEY (users_id) REFERENCES users(id),
+   FOREIGN KEY (questions_id) REFERENCES questions(id)
 );
 
 CREATE TABLE replies (
@@ -27,13 +30,18 @@ CREATE TABLE replies (
    reply_id INTEGER,
    body TEXT NOT NULL,
 
+   FOREIGN KEY (questions_id) REFERENCES questions(id),
+   FOREIGN KEY (users_id) REFERENCES users(id),
    FOREIGN KEY (reply_id) REFERENCES replies(id)
 );
 
 CREATE TABLE question_likes (
    id INTEGER PRIMARY KEY,
    questions_id INTEGER NOT NULL,
-   users_id INTEGER NOT NULL
+   users_id INTEGER NOT NULL,
+
+   FOREIGN KEY (questions_id) REFERENCES questions(id),
+   FOREIGN KEY (users_id) REFERENCES users(id)
 );
 
 INSERT INTO
@@ -66,7 +74,11 @@ VALUES
    (1, 4, NULL, 'I do not like bananas, so this does not apply'),
    (1, 1, 1, 'you are a loser'),
    (1, 2, 2, 'that was mean, take it back'),
-   (1, 2, 3, 'you cannot make me.');
+   (1, 1, 3, 'you cannot make me.'),
+   (1, 3, 1, 'I also do not like bananas!'),
+   (1, 1, 5, 'fricking losers all around omg'),
+   (1, 3, 2, 'you are a bully');
+
 
 INSERT INTO
    question_likes(questions_id, users_id)

@@ -48,6 +48,10 @@ class Users
     def authored_questions
         Questions.find_by_author_id(self.id)
     end
+
+    def authored_replies
+        Replies.find_by_user_id(self.id)
+    end
 end
 
 class Questions
@@ -84,6 +88,14 @@ class Questions
         @body = options['body']
         @author_id = options['author_id']
     end
+
+    def author
+        Users.find_by_id(self.author_id)
+    end
+
+    def replies
+        Replies.find_by_question_id(self.id)
+    end
 end
 
 class Question_follows
@@ -116,7 +128,7 @@ class Replies
             FROM
                 replies
             WHERE
-                user_id = ?
+                users_id = ?
         SQL
         return nil unless row.length > 0
 
@@ -130,7 +142,7 @@ class Replies
             FROM
                 replies
             WHERE
-                question_id
+                questions_id = ?
         SQL
         return nil unless row.length > 0
 
@@ -143,6 +155,32 @@ class Replies
         @users_id = options['users_id']
         @reply_id = options['reply_id']
         @body = options['body']
+    end
+
+    def author
+        Users.find_by_id(self.users_id)
+    end
+
+    def question
+        Questions.find_by_id(self.questions_id)
+    end
+
+    def parent_reply
+        Replies.find_by_id(reply_id)
+    end
+
+    def child_replies
+        child = QuestionsDBConnection.instance.execute(<<-SQL, self.id)
+            SELECT
+                *
+            FROM
+                replies
+            WHERE
+                reply_id = ?
+        SQL
+
+        raise 'no children' if child.length == 0
+        child.map { |chick| Replies.new(chick) }
     end
 end
 
