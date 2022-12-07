@@ -51,6 +51,7 @@ VALUES
    ('Bananas?', 'How many bananas?', 1),
    ('Woke?', 'Are you woke?', 2);
 
+
 INSERT INTO
    question_follows (users_id, questions_id)
 VALUES
@@ -58,5 +59,20 @@ VALUES
    (2,2),
    (3,2);
 
+
 INSERT INTO
-   replies
+   replies (questions_id, users_id, reply_id, body)
+VALUES
+   (1, 4, NULL, 'I do not like bananas, so this does not apply'),
+   (1, 1, 1, 'you are a loser'),
+   (1, 2, 2, 'that was mean, take it back'),
+   (1, 2, 3, 'you cannot make me.');
+
+INSERT INTO
+   question_likes(questions_id, users_id)
+VALUES
+   (1, 1),
+   (1, 2),
+   (1, 3),
+   (1, 4),
+   (2, 1);
