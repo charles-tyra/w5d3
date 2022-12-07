@@ -33,15 +33,20 @@ class Users
             FROM
                 users
             WHERE
-                fname , lname = ?
+                fname = ? AND lname = ?
         SQL
         return nil unless row.length > 0
+        Users.new(row.first)
     end
 
     def initialize(options)
         @id = options['id']
         @fname = options['fname']
         @lname = options['lname']
+    end
+
+    def authored_questions
+        Questions.find_by_author_id(self.id)
     end
 end
 
